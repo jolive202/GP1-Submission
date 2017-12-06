@@ -102,6 +102,7 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 			theAsteroids[astro]->setAsteroidVelocity({ 3, 3 });
 			theAsteroids[astro]->setActive(true);
 		}
+		score = 0;
 }
 
 
@@ -173,6 +174,7 @@ void cGame::update(double deltaTime)
 		}
 	}
 	// Update the visibility and position of each bullet
+	/*
 	vector<cBullet*>::iterator bulletIterartor = theBullets.begin();
 	while (bulletIterartor != theBullets.end())
 	{
@@ -186,26 +188,24 @@ void cGame::update(double deltaTime)
 			++bulletIterartor;
 		}
 	}
+	*/
 	/*
 	==============================================================
 	| Check for collisions
 	==============================================================
 	*/
-	for (vector<cBullet*>::iterator bulletIterartor = theBullets.begin(); bulletIterartor != theBullets.end(); ++bulletIterartor)
-	{
-		//(*bulletIterartor)->update(deltaTime);
+	
+		//collison detector in update(deltaTime);
 		for (vector<cAsteroid*>::iterator asteroidIterator = theAsteroids.begin(); asteroidIterator != theAsteroids.end(); ++asteroidIterator)
 		{
-			if ((*asteroidIterator)->collidedWith(&(*asteroidIterator)->getBoundingRect(), &(*bulletIterartor)->getBoundingRect()))
+			if (theRocket.collidedWith(&(theRocket.getBoundingRect()), &(*asteroidIterator)->getBoundingRect()))
 			{
-				// if a collision set the bullet and asteroid to false
+				// if a collision set the asteroid to false
 				(*asteroidIterator)->setActive(false);
-				(*bulletIterartor)->setActive(false);
 				theSoundMgr->getSnd("explosion")->play(0);
+				score++;
 			}
 		}
-	}
-
 
 	// Update the Rockets position
 	theRocket.update(deltaTime);
@@ -269,6 +269,7 @@ bool cGame::getInput(bool theLoop)
 					theRocket.setRocketVelocity({ -250 , 0 });
 				}
 				break;
+				/*
 				case SDLK_SPACE:
 				{
 					theBullets.push_back(new cBullet);
@@ -286,10 +287,12 @@ bool cGame::getInput(bool theLoop)
 				break;
 				default:
 					break;
+					*/
 				}
 
 			default:
 				break;
+				
 		}
 
 	}

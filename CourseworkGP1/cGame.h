@@ -63,6 +63,7 @@ private:
 	// Game objects
 	// Define the elements and there position in/on the array/map
 	int renderWidth, renderHeight;
+	int score;
 };
 
 #endif
