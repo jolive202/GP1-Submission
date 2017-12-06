@@ -75,19 +75,19 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_mixer-2.0.1\include;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_ttf-2.0.14\include;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_image-2.0.1\include;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2-2.0.4\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jolive202\Desktop\SDL2\SDL2_mixer-2.0.1\include;C:\Users\jolive202\Desktop\SDL2\SDL2_ttf-2.0.14\include;C:\Users\jolive202\Desktop\SDL2\SDL2_image-2.0.1\include;C:\Users\jolive202\Desktop\SDL2\SDL2-2.0.4\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_mixer-2.0.1\lib\x86;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_ttf-2.0.14\lib\x86;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_image-2.0.1\lib\x86;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2-2.0.4\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\jolive202\Desktop\SDL2\SDL2_mixer-2.0.1\lib\x86;C:\Users\jolive202\Desktop\SDL2\SDL2_ttf-2.0.14\lib\x86;C:\Users\jolive202\Desktop\SDL2\SDL2_image-2.0.1\lib\x86;C:\Users\jolive202\Desktop\SDL2\SDL2-2.0.4\lib\x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>echo copying SDL2.dll to debug directory
-xcopy /Y "C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2-2.0.4\lib\x86\SDL2.dll" "$(OutDir)"
-xcopy /Y "C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_image-2.0.1\lib\x86\*.dll" "$(OutDir)"
-xcopy /Y "C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_ttf-2.0.14\lib\x86\*.dll" "$(OutDir)"
-xcopy /Y "C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
+xcopy /Y "C:\Users\jolive202\Desktop\SDL2\SDL2-2.0.4\lib\x86\SDL2.dll" "$(OutDir)"
+xcopy /Y "C:\Users\jolive202\Desktop\SDL2\SDL2_image-2.0.1\lib\x86\*.dll" "$(OutDir)"
+xcopy /Y "C:\Users\jolive202\Desktop\SDL2\SDL2_ttf-2.0.14\lib\x86\*.dll" "$(OutDir)"
+xcopy /Y "C:\Users\jolive202\Desktop\SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -104,21 +104,21 @@ xcopy /Y "C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll"
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_mixer-2.0.1\include;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_ttf-2.0.14\include;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_image-2.0.1\include;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2-2.0.4\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\jolive202\Desktop\SDL2\SDL2_mixer-2.0.1\include;C:\Users\jolive202\Desktop\SDL2\SDL2_ttf-2.0.14\include;C:\Users\jolive202\Desktop\SDL2\SDL2_image-2.0.1\include;C:\Users\jolive202\Desktop\SDL2\SDL2-2.0.4\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_mixer-2.0.1\lib\x86;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_ttf-2.0.14\lib\x86;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_image-2.0.1\lib\x86;C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2-2.0.4\lib\x86</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\jolive202\Desktop\SDL2\SDL2_mixer-2.0.1\lib\x86;C:\Users\jolive202\Desktop\SDL2\SDL2_ttf-2.0.14\lib\x86;C:\Users\jolive202\Desktop\SDL2\SDL2_image-2.0.1\lib\x86;C:\Users\jolive202\Desktop\SDL2\SDL2-2.0.4\lib\x86</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_ttf.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>echo copying SDL2.dll to debug directory
-xcopy /Y "C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2-2.0.4\lib\x86\SDL2.dll" "$(OutDir)"
-xcopy /Y "C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_image-2.0.1\lib\x86\*.dll" "$(OutDir)"
-xcopy /Y "C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_ttf-2.0.14\lib\x86\*.dll" "$(OutDir)"
-xcopy /Y "C:\Users\jolive202\Desktop\GitHub\SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
+xcopy /Y "C:\Users\jolive202\Desktop\SDL2\SDL2-2.0.4\lib\x86\SDL2.dll" "$(OutDir)"
+xcopy /Y "C:\Users\jolive202\Desktop\SDL2\SDL2_image-2.0.1\lib\x86\*.dll" "$(OutDir)"
+xcopy /Y "C:\Users\jolive202\Desktop\SDL2\SDL2_ttf-2.0.14\lib\x86\*.dll" "$(OutDir)"
+xcopy /Y "C:\Users\jolive202\Desktop\SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
