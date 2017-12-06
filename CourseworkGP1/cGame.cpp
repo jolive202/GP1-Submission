@@ -64,9 +64,10 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	{
 		theFontMgr->addFont(fontList[fonts], fontsToUse[fonts], 36);
 	}
-	gameTextList = { "Fruit Catcher" };
+	gameTextList = { "Fruit Catcher", "Score : 0" };
 
 	theTextureMgr->addTexture("Title", theFontMgr->getFont("skipLegDay")->createTextTexture(theRenderer, gameTextList[0], SOLID, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
+	theTextureMgr->addTexture("Score", theFontMgr->getFont("skipLegDay")->createTextTexture(theRenderer, gameTextList[1], SOLID, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
 
 	// Load game sounds
 	soundList = { "theme", "shot", "explosion" };
@@ -141,6 +142,21 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
 	FPoint scale = { 1, 1 };
 	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+	
+	//Render Score
+
+	if (scoreChanged)
+	{
+		gameTextList[1] = scoreAsString.c_str();
+		theTextureMgr->addTexture("Score", theFontMgr->getFont("skipLegDay")->createTextTexture(theRenderer, gameTextList[1], SOLID, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
+		scoreChanged = false;
+	}
+
+	tempTextTexture = theTextureMgr->getTexture("Score");
+	pos = { 10, 50, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+	scale = { 1, 1 };
+	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+	
 	// render the rocket
 	theRocket.render(theRenderer, &theRocket.getSpriteDimensions(), &theRocket.getSpritePos(), theRocket.getSpriteRotAngle(), &theRocket.getSpriteCentre(), theRocket.getSpriteScale());
 	SDL_RenderPresent(theRenderer);
@@ -201,9 +217,19 @@ void cGame::update(double deltaTime)
 			if (theRocket.collidedWith(&(theRocket.getBoundingRect()), &(*asteroidIterator)->getBoundingRect()))
 			{
 				// if a collision set the asteroid to false
+				score++;
+				if (theTextureMgr->getTexture("Score") != NULL)
+				{
+					theTextureMgr->deleteTexture("Score");
+				}
+
+
+				string theScore = to_string(score);
+				scoreAsString = "Score : " + theScore;
+				scoreChanged = true;
+
 				(*asteroidIterator)->setActive(false);
 				theSoundMgr->getSnd("explosion")->play(0);
-				score++;
 			}
 		}
 

@@ -64,6 +64,8 @@ private:
 	// Define the elements and there position in/on the array/map
 	int renderWidth, renderHeight;
 	int score;
+	string scoreAsString;
+	bool scoreChanged;
 };
 
 #endif
