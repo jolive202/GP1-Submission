@@ -91,7 +91,6 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 
 	// Create vector array of textures
 	
-	
 		for (int astro = 0; astro < 1; astro++)
 		{
 			theAsteroids.push_back(new cAsteroid);
@@ -189,6 +188,7 @@ void cGame::update(double deltaTime)
 			++asteroidIterator;
 		}
 	}
+
 	// Update the visibility and position of each bullet
 	/*
 	vector<cBullet*>::iterator bulletIterartor = theBullets.begin();
