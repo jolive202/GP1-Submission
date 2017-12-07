@@ -3,6 +3,7 @@
 cGame.cpp
 ==================================================================================
 */
+
 #include "cGame.h"
 
 cGame* cGame::pInstance = NULL;
@@ -16,15 +17,18 @@ static cSoundMgr* theSoundMgr = cSoundMgr::getInstance();
 Constructor
 =================================================================================
 */
+
 cGame::cGame()
 {
 
 }
+
 /*
 =================================================================================
 Singleton Design Pattern
 =================================================================================
 */
+
 cGame* cGame::getInstance()
 {
 	if (pInstance == NULL)
@@ -40,9 +44,12 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	srand(time(NULL));
 
 	// Get width and height of render context
+
 	SDL_GetRendererOutputSize(theRenderer, &renderWidth, &renderHeight);
 	this->m_lastTime = high_resolution_clock::now();
+
 	// Clear the buffer with a black background
+
 	SDL_SetRenderDrawColor(theRenderer, 0, 0, 0, 255);
 	SDL_RenderPresent(theRenderer);
 
@@ -51,6 +58,7 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theSoundMgr->initMixer();
 
 	// Store the textures
+
 	textureName = { "asteroid1", "asteroid2", "asteroid3", "asteroid4","asteroid 5", "bullet","theRocket","theBackground" };
 	texturesToUse = { "Images\\Apple.png", "Images\\Orange.png", "Images\\Banana.png", "Images\\Pear.png", "Images\\Strawberry.png", "Images\\bullet.png", "Images\\basket.png", "Images\\backgroundPark.png" };
 	for (int tCount = 0; tCount < textureName.size(); tCount++)
@@ -58,6 +66,7 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		theTextureMgr->addTexture(textureName[tCount], texturesToUse[tCount]);
 	}
 	// Create textures for Game Dialogue (text)
+
 	fontList = { "digital", "spaceAge", "skipLegDay" };
 	fontsToUse = { "Fonts/digital-7.ttf", "Fonts/space age.ttf", "Fonts/SkipLegDay.ttf" };
 	for (int fonts = 0; fonts < fontList.size(); fonts++)
@@ -70,6 +79,7 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theTextureMgr->addTexture("Score", theFontMgr->getFont("skipLegDay")->createTextTexture(theRenderer, gameTextList[1], SOLID, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
 
 	// Load game sounds
+
 	soundList = { "theme", "explosion", "squelch"};
 	soundTypes = { MUSIC, SFX, SFX };
 	soundsToUse = { "Audio/8bit_song.wav", "Audio/Bell.wav", "Audio/Squelch.wav" };
@@ -130,6 +140,7 @@ void cGame::run(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	while (loop)
 	{
 		//We get the time that passed since the last frame
+
 		double elapsedTime = this->getElapsedSeconds();
 
 		loop = this->getInput(loop);
@@ -142,19 +153,16 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 {
 	SDL_RenderClear(theRenderer);
 	spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
+
 	// Render each fruit in the vector array
+
 	for (int draw = 0; draw < theAsteroids.size(); draw++)
 	{
 		theAsteroids[draw]->render(theRenderer, &theAsteroids[draw]->getSpriteDimensions(), &theAsteroids[draw]->getSpritePos(), theAsteroids[draw]->getSpriteRotAngle(), &theAsteroids[draw]->getSpriteCentre(), theAsteroids[draw]->getSpriteScale());
 	}
 
-	/* Render each bullet in the vector array
-	for (int draw = 0; draw < theBullets.size(); draw++)
-	{
-		theBullets[draw]->render(theRenderer, &theBullets[draw]->getSpriteDimensions(), &theBullets[draw]->getSpritePos(), theBullets[draw]->getSpriteRotAngle(), &theBullets[draw]->getSpriteCentre(), theBullets[draw]->getSpriteScale());
-	}*/
-
 	// Render the Title
+
 	cTexture* tempTextTexture = theTextureMgr->getTexture("Title");
 	SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
 	FPoint scale = { 1, 1 };
@@ -175,6 +183,7 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 	
 	// render the basket
+
 	theRocket.render(theRenderer, &theRocket.getSpriteDimensions(), &theRocket.getSpritePos(), theRocket.getSpriteRotAngle(), &theRocket.getSpriteCentre(), theRocket.getSpriteScale());
 	SDL_RenderPresent(theRenderer);
 }
@@ -192,8 +201,10 @@ void cGame::update()
 
 void cGame::update(double deltaTime)
 {
-	int fruitCaught = 0;
 	// Update the visibility and position of each fruit
+
+	int fruitCaught = 0;
+
 	vector<cAsteroid*>::iterator asteroidIterator = theAsteroids.begin();
 	while (asteroidIterator != theAsteroids.end())
 	{
@@ -212,6 +223,7 @@ void cGame::update(double deltaTime)
 	for (int playerBasket = 0; playerBasket < fruitCaught; ++playerBasket)
 	{
 		// create a new fruit
+
 		createFruit();
 	}
 
@@ -219,28 +231,22 @@ void cGame::update(double deltaTime)
 	{
 		if (theAsteroids[a]->getSpritePos().y >= (renderHeight - 75))
 		{
+			score--;
+			if (theTextureMgr->getTexture("Score") != NULL)
+			{
+				theTextureMgr->deleteTexture("Score");
+			}
+
+
+			string theScore = to_string(score);
+			scoreAsString = "Score : " + theScore;
+			scoreChanged = true;
+
 			theAsteroids[a]->setActive(false);
 			theSoundMgr->getSnd("squelch")->play(0);
 		}
 	}
-	
 
-	// Update the visibility and position of each bullet
-	/*
-	vector<cBullet*>::iterator bulletIterartor = theBullets.begin();
-	while (bulletIterartor != theBullets.end())
-	{
-		if ((*bulletIterartor)->isActive() == false)
-		{
-			bulletIterartor = theBullets.erase(bulletIterartor);
-		}
-		else
-		{
-			(*bulletIterartor)->update(deltaTime);
-			++bulletIterartor;
-		}
-	}
-	*/
 	/*
 	==============================================================
 	| Check for collisions
@@ -248,11 +254,13 @@ void cGame::update(double deltaTime)
 	*/
 	
 		//collison detector in update(deltaTime);
+
 		for (vector<cAsteroid*>::iterator asteroidIterator = theAsteroids.begin(); asteroidIterator != theAsteroids.end(); ++asteroidIterator)
 		{
 			if (theRocket.collidedWith(&(theRocket.getBoundingRect()), &(*asteroidIterator)->getBoundingRect()))
 			{
 				// if a collision set the fruit to false
+
 				score++;
 				if (theTextureMgr->getTexture("Score") != NULL)
 				{
@@ -270,6 +278,7 @@ void cGame::update(double deltaTime)
 		}
 
 	// Update the basket's position
+
 	theRocket.update(deltaTime);
 }
 
@@ -331,30 +340,10 @@ bool cGame::getInput(bool theLoop)
 					theRocket.setRocketVelocity({ -250 , 0 });
 				}
 				break;
-				/*
-				case SDLK_SPACE:
-				{
-					theBullets.push_back(new cBullet);
-					int numBullets = theBullets.size() - 1;
-					theBullets[numBullets]->setSpritePos({ theRocket.getBoundingRect().x + theRocket.getSpriteCentre().x, theRocket.getBoundingRect().y + theRocket.getSpriteCentre().y });
-					theBullets[numBullets]->setSpriteTranslation({ 2, 2 });
-					theBullets[numBullets]->setTexture(theTextureMgr->getTexture("bullet"));
-					theBullets[numBullets]->setSpriteDimensions(theTextureMgr->getTexture("bullet")->getTWidth(), theTextureMgr->getTexture("bullet")->getTHeight());
-					theBullets[numBullets]->setBulletVelocity({ 2, 2 });
-					theBullets[numBullets]->setSpriteRotAngle(theRocket.getSpriteRotAngle());
-					theBullets[numBullets]->setActive(true);
-					cout << "Bullet added to Vector at position - x: " << theRocket.getBoundingRect().x << " y: " << theRocket.getBoundingRect().y << endl;
-				}
-				theSoundMgr->getSnd("shot")->play(0);
-				break;
-				default:
-					break;
-					*/
 				}
 
 			default:
-				break;
-				
+				break;			
 		}
 
 	}
