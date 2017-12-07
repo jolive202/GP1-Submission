@@ -66,6 +66,9 @@ private:
 	int score;
 	string scoreAsString;
 	bool scoreChanged;
+	int spawnAmount;
+
+	void createFruit();
 };
 
 #endif

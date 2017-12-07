@@ -91,11 +91,11 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 
 	// Create vector array of textures
 	
-		for (int astro = 0; astro < 1; astro++)
+		for (int astro = 0; astro < 5; astro++)
 		{
 			theAsteroids.push_back(new cAsteroid);
 			theAsteroids[astro]->setSpritePos({ 150 * (rand() % 5 + 1), 5 * (rand() % 5 + 1) });
-			theAsteroids[astro]->setSpriteTranslation({ 5, 5 });
+			theAsteroids[astro]->setSpriteTranslation({ 3 * (rand() % 2 + 1), 3 * (rand() % 2 + 1) });
 			int randAsteroid = rand() % 5;
 			theAsteroids[astro]->setTexture(theTextureMgr->getTexture(textureName[randAsteroid]));
 			theAsteroids[astro]->setSpriteDimensions(theTextureMgr->getTexture(textureName[randAsteroid])->getTWidth(), theTextureMgr->getTexture(textureName[randAsteroid])->getTHeight());
@@ -103,6 +103,22 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 			theAsteroids[astro]->setActive(true);
 		}
 		score = 0;
+}
+
+void cGame::createFruit()
+{
+	theAsteroids.push_back(new cAsteroid);
+	int numberOfAsteroids = theAsteroids.size();
+	int fruit = numberOfAsteroids - 1;
+
+	theAsteroids[fruit]->setSpritePos({ 150 * (rand() % 5 + 1), 5 * (rand() % 5 + 1) });
+	theAsteroids[fruit]->setSpriteTranslation({ 3 * (rand() % 2 + 1), 3 * (rand() % 2 + 1) });
+	int randAsteroid = rand() % 5;
+	theAsteroids[fruit]->setTexture(theTextureMgr->getTexture(textureName[randAsteroid]));
+	theAsteroids[fruit]->setSpriteDimensions(theTextureMgr->getTexture(textureName[randAsteroid])->getTWidth(), theTextureMgr->getTexture(textureName[randAsteroid])->getTHeight());
+	theAsteroids[fruit]->setAsteroidVelocity({ 3, 3 });
+	theAsteroids[fruit]->setActive(true);
+
 }
 
 
@@ -126,16 +142,18 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 {
 	SDL_RenderClear(theRenderer);
 	spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
-	// Render each asteroid in the vector array
+	// Render each fruit in the vector array
 	for (int draw = 0; draw < theAsteroids.size(); draw++)
 	{
 		theAsteroids[draw]->render(theRenderer, &theAsteroids[draw]->getSpriteDimensions(), &theAsteroids[draw]->getSpritePos(), theAsteroids[draw]->getSpriteRotAngle(), &theAsteroids[draw]->getSpriteCentre(), theAsteroids[draw]->getSpriteScale());
 	}
-	// Render each bullet in the vector array
+
+	/* Render each bullet in the vector array
 	for (int draw = 0; draw < theBullets.size(); draw++)
 	{
 		theBullets[draw]->render(theRenderer, &theBullets[draw]->getSpriteDimensions(), &theBullets[draw]->getSpritePos(), theBullets[draw]->getSpriteRotAngle(), &theBullets[draw]->getSpriteCentre(), theBullets[draw]->getSpriteScale());
-	}
+	}*/
+
 	// Render the Title
 	cTexture* tempTextTexture = theTextureMgr->getTexture("Title");
 	SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
@@ -156,7 +174,7 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	scale = { 1, 1 };
 	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
 	
-	// render the rocket
+	// render the basket
 	theRocket.render(theRenderer, &theRocket.getSpriteDimensions(), &theRocket.getSpritePos(), theRocket.getSpriteRotAngle(), &theRocket.getSpriteCentre(), theRocket.getSpriteScale());
 	SDL_RenderPresent(theRenderer);
 }
@@ -174,13 +192,15 @@ void cGame::update()
 
 void cGame::update(double deltaTime)
 {
-	// Update the visibility and position of each asteriod
+	int fruitCaught = 0;
+	// Update the visibility and position of each fruit
 	vector<cAsteroid*>::iterator asteroidIterator = theAsteroids.begin();
 	while (asteroidIterator != theAsteroids.end())
 	{
 		if ((*asteroidIterator)->isActive() == false)
 		{
 			asteroidIterator = theAsteroids.erase(asteroidIterator);
+			++fruitCaught;
 		}
 		else
 		{
@@ -188,6 +208,22 @@ void cGame::update(double deltaTime)
 			++asteroidIterator;
 		}
 	}
+
+	for (int playerBasket = 0; playerBasket < fruitCaught; ++playerBasket)
+	{
+		// create a new fruit
+		createFruit();
+	}
+
+	for (int a = 0; a < theAsteroids.size(); a++)
+	{
+		if (theAsteroids[a]->getSpritePos().y >= (renderHeight - 75))
+		{
+			theAsteroids[a]->setActive(false);
+
+		}
+	}
+	
 
 	// Update the visibility and position of each bullet
 	/*
@@ -216,7 +252,7 @@ void cGame::update(double deltaTime)
 		{
 			if (theRocket.collidedWith(&(theRocket.getBoundingRect()), &(*asteroidIterator)->getBoundingRect()))
 			{
-				// if a collision set the asteroid to false
+				// if a collision set the fruit to false
 				score++;
 				if (theTextureMgr->getTexture("Score") != NULL)
 				{
@@ -233,7 +269,7 @@ void cGame::update(double deltaTime)
 			}
 		}
 
-	// Update the Rockets position
+	// Update the basket's position
 	theRocket.update(deltaTime);
 }
 
