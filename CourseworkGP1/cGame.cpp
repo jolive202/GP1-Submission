@@ -70,9 +70,9 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theTextureMgr->addTexture("Score", theFontMgr->getFont("skipLegDay")->createTextTexture(theRenderer, gameTextList[1], SOLID, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
 
 	// Load game sounds
-	soundList = { "theme", "shot", "explosion" };
+	soundList = { "theme", "explosion", "squelch"};
 	soundTypes = { MUSIC, SFX, SFX };
-	soundsToUse = { "Audio/who10Edit.wav", "Audio/shot007.wav", "Audio/explosion2.wav" };
+	soundsToUse = { "Audio/8bit_song.wav", "Audio/Bell.wav", "Audio/Squelch.wav" };
 	for (int sounds = 0; sounds < soundList.size(); sounds++)
 	{
 		theSoundMgr->add(soundList[sounds], soundsToUse[sounds], soundTypes[sounds]);
@@ -220,7 +220,7 @@ void cGame::update(double deltaTime)
 		if (theAsteroids[a]->getSpritePos().y >= (renderHeight - 75))
 		{
 			theAsteroids[a]->setActive(false);
-
+			theSoundMgr->getSnd("squelch")->play(0);
 		}
 	}
 	
