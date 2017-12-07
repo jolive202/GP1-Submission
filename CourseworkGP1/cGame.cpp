@@ -227,10 +227,14 @@ void cGame::update(double deltaTime)
 		createFruit();
 	}
 
+	//Check fruit position
+
 	for (int a = 0; a < theAsteroids.size(); a++)
 	{
 		if (theAsteroids[a]->getSpritePos().y >= (renderHeight - 75))
 		{
+			//if fruit position passes the player with no collision, set the fruit to false
+
 			score--;
 			if (theTextureMgr->getTexture("Score") != NULL)
 			{
