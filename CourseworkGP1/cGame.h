@@ -76,11 +76,18 @@ private:
 	string scoreAsString;
 	bool scoreChanged;
 	int spawnAmount;
+
 	gameState theGameState;
 	btnTypes theBtnType;
 	SDL_Rect pos;
 	FPoint scale;
 	SDL_Point theAreaClicked;
+
+	SDL_Point theTileClicked;
+	SDL_Point mapTileClicked;
+	SDL_Point aRect;
+
+
 
 	void createFruit();
 };

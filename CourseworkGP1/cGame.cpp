@@ -79,6 +79,29 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theTextureMgr->addTexture("Title", theFontMgr->getFont("skipLegDay")->createTextTexture(theRenderer, gameTextList[0], SOLID, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
 	theTextureMgr->addTexture("Score", theFontMgr->getFont("skipLegDay")->createTextTexture(theRenderer, gameTextList[1], SOLID, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
 
+	//store buttons
+
+	btnNameList = { "exit_btn", "load_btn", "menu_btn", "menu_btn", "play_btn", "save_btn", "settings_btn" };
+	btnTexturesToUse = { "Images/button_exit.png", "Images/button_load.png", "Images/button_menu.png", "Images/button_play.png", "Images/button_save.png", "Images/button_settings.png" };
+	btnPos = { {400, 375}, {400, 300}, {400, 300}, {500, 500}, {400, 300}, {740, 500}, {400, 300} };
+
+	for (int buttonCount = 0; buttonCount < btnNameList.size(); buttonCount++)
+	{
+		theTextureMgr->addTexture(btnNameList[buttonCount], btnTexturesToUse[buttonCount]);
+	}
+
+	for (int buttonCount = 0; buttonCount < btnNameList.size(); buttonCount++)
+	{
+		cButton * newBtn = new cButton();
+		newBtn->setTexture(theTextureMgr->getTexture(btnNameList[buttonCount]));
+		newBtn->setSpritePos(btnPos[buttonCount]);
+		newBtn->setSpriteDimensions(theTextureMgr->getTexture(btnNameList[buttonCount])->getTWidth(), theTextureMgr->getTexture(btnNameList[buttonCount])->getTHeight());
+		theButtonMgr->add(btnNameList[buttonCount], newBtn);
+	}
+
+	theGameState = MENU;
+	theBtnType = EXIT;
+
 	// Load game sounds
 
 	soundList = { "theme", "explosion", "squelch"};
@@ -187,6 +210,51 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 
 	theRocket.render(theRenderer, &theRocket.getSpriteDimensions(), &theRocket.getSpritePos(), theRocket.getSpriteRotAngle(), &theRocket.getSpriteCentre(), theRocket.getSpriteScale());
 	SDL_RenderPresent(theRenderer);
+
+	//-------------------------------------------------------------------------------------
+
+	SDL_RenderClear(theRenderer);
+
+	switch (theGameState)
+	{
+	case MENU:
+	{
+		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
+
+
+
+		SDL_RenderPresent(theRenderer);
+	}
+	break;
+
+	case PLAYING:
+	{
+		SDL_RenderClear(theRenderer);
+		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
+
+		SDL_RenderPresent(theRenderer);
+	}
+	break;
+
+	case END:
+	{
+		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
+
+		SDL_RenderPresent(theRenderer);
+	}
+	break;
+
+	case QUIT:
+	{
+
+	}
+	break;
+	default:
+		break;
+	}
+
+	SDL_RenderPresent(theRenderer);
+
 }
 
 void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer, double rotAngle, SDL_Point* spriteCentre)
@@ -305,6 +373,7 @@ bool cGame::getInput(bool theLoop)
 				{
 				case SDL_BUTTON_LEFT:
 				{
+					theAreaClicked = { event.motion.x, event.motion.y };
 				}
 				break;
 				case SDL_BUTTON_RIGHT:
