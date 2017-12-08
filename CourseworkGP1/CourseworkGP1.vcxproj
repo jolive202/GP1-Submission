@@ -163,6 +163,8 @@ xcopy /Y "C:\Users\JOLIVE202\Desktop\SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(Out
     <ClInclude Include="cAsteroid.h" />
     <ClInclude Include="cBkGround.h" />
     <ClInclude Include="cBullet.h" />
+    <ClInclude Include="cButton.h" />
+    <ClInclude Include="cButtonMgr.h" />
     <ClInclude Include="cFont.h" />
     <ClInclude Include="cFontMgr.h" />
     <ClInclude Include="cGame.h" />
@@ -180,6 +182,8 @@ xcopy /Y "C:\Users\JOLIVE202\Desktop\SDL2\SDL2_mixer-2.0.1\lib\x86\*.dll" "$(Out
     <ClCompile Include="cAsteroid.cpp" />
     <ClCompile Include="cBkGround.cpp" />
     <ClCompile Include="cBullet.cpp" />
+    <ClCompile Include="cButton.cpp" />
+    <ClCompile Include="cButtonMgr.cpp" />
     <ClCompile Include="cFont.cpp" />
     <ClCompile Include="cFontMgr.cpp" />
     <ClCompile Include="cGame.cpp" />
