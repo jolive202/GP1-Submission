@@ -39,6 +39,7 @@ private:
 	time_point< high_resolution_clock > m_lastTime;
 	time_point< high_resolution_clock > m_CurrentTime;
 	duration< double > deltaTime;
+	bool loop;
 
 	// Sprites for displaying background and rocket textures
 	cSprite spriteBkgd;
@@ -60,13 +61,26 @@ private:
 	vector<LPCSTR> soundList;
 	vector<soundType> soundTypes;
 	vector<LPCSTR> soundsToUse;
+	//Create vector array of button textures
+	vector<LPCSTR> btnNameList; //for menu
+	vector<LPCSTR> btnTexturesToUse;
+	vector<SDL_Point> btnPos;
+	vector<cButton> theButtons;
+
+
 	// Game objects
+
 	// Define the elements and there position in/on the array/map
 	int renderWidth, renderHeight;
 	int score;
 	string scoreAsString;
 	bool scoreChanged;
 	int spawnAmount;
+	gameState theGameState;
+	btnTypes theBtnType;
+	SDL_Rect pos;
+	FPoint scale;
+	SDL_Point theAreaClicked;
 
 	void createFruit();
 };
