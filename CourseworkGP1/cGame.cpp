@@ -81,9 +81,9 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 
 	//store buttons
 
-	btnNameList = { "exit_btn", "load_btn", "menu_btn", "menu_btn", "play_btn", "save_btn", "settings_btn" };
+	btnNameList = { "exit_btn", "load_btn", "menu_btn", "play_btn", "save_btn", "settings_btn" };
 	btnTexturesToUse = { "Images/button_exit.png", "Images/button_load.png", "Images/button_menu.png", "Images/button_play.png", "Images/button_save.png", "Images/button_settings.png" };
-	btnPos = { {400, 375}, {400, 300}, {400, 300}, {500, 500}, {400, 300}, {740, 500}, {400, 300} };
+	btnPos = { {400, 375}, {400, 300}, {500, 500}, {400, 300}, {740, 500}, {400, 300} };
 
 	for (int buttonCount = 0; buttonCount < btnNameList.size(); buttonCount++)
 	{
@@ -152,14 +152,13 @@ void cGame::createFruit()
 	theAsteroids[fruit]->setSpriteDimensions(theTextureMgr->getTexture(textureName[randAsteroid])->getTWidth(), theTextureMgr->getTexture(textureName[randAsteroid])->getTHeight());
 	theAsteroids[fruit]->setAsteroidVelocity({ 3, 3 });
 	theAsteroids[fruit]->setActive(true);
-
 }
 
 
 
 void cGame::run(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 {
-	bool loop = true;
+	loop = true;
 
 	while (loop)
 	{
@@ -178,41 +177,6 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	SDL_RenderClear(theRenderer);
 	spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
 
-	// Render each fruit in the vector array
-
-	for (int draw = 0; draw < theAsteroids.size(); draw++)
-	{
-		theAsteroids[draw]->render(theRenderer, &theAsteroids[draw]->getSpriteDimensions(), &theAsteroids[draw]->getSpritePos(), theAsteroids[draw]->getSpriteRotAngle(), &theAsteroids[draw]->getSpriteCentre(), theAsteroids[draw]->getSpriteScale());
-	}
-
-	// Render the Title
-
-	cTexture* tempTextTexture = theTextureMgr->getTexture("Title");
-	SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
-	FPoint scale = { 1, 1 };
-	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
-	
-	//Render Score
-
-	if (scoreChanged)
-	{
-		gameTextList[1] = scoreAsString.c_str();
-		theTextureMgr->addTexture("Score", theFontMgr->getFont("skipLegDay")->createTextTexture(theRenderer, gameTextList[1], SOLID, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
-		scoreChanged = false;
-	}
-
-	tempTextTexture = theTextureMgr->getTexture("Score");
-	pos = { 10, 50, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
-	scale = { 1, 1 };
-	tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
-	
-	// render the basket
-
-	theRocket.render(theRenderer, &theRocket.getSpriteDimensions(), &theRocket.getSpritePos(), theRocket.getSpriteRotAngle(), &theRocket.getSpriteCentre(), theRocket.getSpriteScale());
-	SDL_RenderPresent(theRenderer);
-
-	//-------------------------------------------------------------------------------------
-
 	SDL_RenderClear(theRenderer);
 
 	switch (theGameState)
@@ -221,7 +185,16 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	{
 		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
 
+		// Render the Title
 
+		cTexture* tempTextTexture = theTextureMgr->getTexture("Title");
+		SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+		FPoint scale = { 1, 1 };
+		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+
+
+		theButtonMgr->getBtn("play_btn")->render(theRenderer, &theButtonMgr->getBtn("play_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("play_btn")->getSpritePos(), theButtonMgr->getBtn("play_btn")->getSpriteScale());
+		theButtonMgr->getBtn("exit_btn")->render(theRenderer, &theButtonMgr->getBtn("exit_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("exit_btn")->getSpritePos(), theButtonMgr->getBtn("exit_btn")->getSpriteScale());
 
 		SDL_RenderPresent(theRenderer);
 	}
@@ -232,6 +205,45 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 		SDL_RenderClear(theRenderer);
 		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
 
+		// Render the Title
+
+		cTexture* tempTextTexture = theTextureMgr->getTexture("Title");
+		SDL_Rect pos = { 10, 10, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+		FPoint scale = { 1, 1 };
+		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+
+
+		theButtonMgr->getBtn("exit_btn")->render(theRenderer, &theButtonMgr->getBtn("exit_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("exit_btn")->getSpritePos(), theButtonMgr->getBtn("exit_btn")->getSpriteScale());
+		theButtonMgr->getBtn("load_btn")->render(theRenderer, &theButtonMgr->getBtn("load_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("load_btn")->getSpritePos(), theButtonMgr->getBtn("load_btn")->getSpriteScale());
+		theButtonMgr->getBtn("save_btn")->render(theRenderer, &theButtonMgr->getBtn("save_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("save_btn")->getSpritePos(), theButtonMgr->getBtn("save_btn")->getSpriteScale());
+
+		// Render each fruit in the vector array
+
+		for (int draw = 0; draw < theAsteroids.size(); draw++)
+		{
+			theAsteroids[draw]->render(theRenderer, &theAsteroids[draw]->getSpriteDimensions(), &theAsteroids[draw]->getSpritePos(), theAsteroids[draw]->getSpriteRotAngle(), &theAsteroids[draw]->getSpriteCentre(), theAsteroids[draw]->getSpriteScale());
+		}
+
+		//Render Score
+
+		if (scoreChanged)
+		{
+			gameTextList[1] = scoreAsString.c_str();
+			theTextureMgr->addTexture("Score", theFontMgr->getFont("skipLegDay")->createTextTexture(theRenderer, gameTextList[1], SOLID, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
+			scoreChanged = false;
+		}
+
+		tempTextTexture = theTextureMgr->getTexture("Score");
+		pos = { 10, 50, tempTextTexture->getTextureRect().w, tempTextTexture->getTextureRect().h };
+		scale = { 1, 1 };
+		tempTextTexture->renderTexture(theRenderer, tempTextTexture->getTexture(), &tempTextTexture->getTextureRect(), &pos, scale);
+
+		// render the basket
+
+		theRocket.render(theRenderer, &theRocket.getSpriteDimensions(), &theRocket.getSpritePos(), theRocket.getSpriteRotAngle(), &theRocket.getSpriteCentre(), theRocket.getSpriteScale());
+		SDL_RenderPresent(theRenderer);
+
+
 		SDL_RenderPresent(theRenderer);
 	}
 	break;
@@ -240,13 +252,16 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	{
 		spriteBkgd.render(theRenderer, NULL, NULL, spriteBkgd.getSpriteScale());
 
+		theButtonMgr->getBtn("menu_btn")->render(theRenderer, &theButtonMgr->getBtn("menu_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("menu_btn")->getSpritePos(), theButtonMgr->getBtn("menu_btn")->getSpriteScale());
+		theButtonMgr->getBtn("exit_btn")->render(theRenderer, &theButtonMgr->getBtn("exit_btn")->getSpriteDimensions(), &theButtonMgr->getBtn("exit_btn")->getSpritePos(), theButtonMgr->getBtn("exit_btn")->getSpriteScale());
+
 		SDL_RenderPresent(theRenderer);
 	}
 	break;
 
 	case QUIT:
 	{
-
+		loop = false;
 	}
 	break;
 	default:
@@ -270,6 +285,20 @@ void cGame::update()
 
 void cGame::update(double deltaTime)
 {
+	//Check Button clicked and change state
+
+	if (theGameState == MENU || theGameState == END)
+	{
+		theGameState = theButtonMgr->getBtn("exit_btn")->update(theGameState, QUIT, theAreaClicked);
+		theGameState = theButtonMgr->getBtn("play_btn")->update(theGameState, PLAYING, theAreaClicked);
+	}
+	else
+	{
+		theGameState = theButtonMgr->getBtn("exit_btn")->update(theGameState, END, theAreaClicked);
+	}
+
+	theGameState = theButtonMgr->getBtn("menu_btn")->update(theGameState, MENU, theAreaClicked);
+
 	// Update the visibility and position of each fruit
 
 	int fruitCaught = 0;
