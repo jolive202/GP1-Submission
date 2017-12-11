@@ -87,8 +87,6 @@ private:
 	SDL_Point mapTileClicked;
 	SDL_Point aRect;
 
-
-
 	void createFruit();
 };
 
