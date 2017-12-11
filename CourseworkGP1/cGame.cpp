@@ -119,19 +119,6 @@ void cGame::initialise(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 	theRocket.setSpriteDimensions(theTextureMgr->getTexture("theRocket")->getTWidth(), theTextureMgr->getTexture("theRocket")->getTHeight());
 	theRocket.setRocketVelocity({ 0, 0 });
 
-		// Create vector array of textures
-		for (int astro = 0; astro < 5; astro++)
-		{
-			theAsteroids.push_back(new cAsteroid);
-			theAsteroids[astro]->setSpritePos({ 150 * (rand() % 5 + 1), 5 * (rand() % 5 + 1) });
-			theAsteroids[astro]->setSpriteTranslation({ 3 * (rand() % 2 + 1), 3 * (rand() % 2 + 1) });
-			int randAsteroid = rand() % 5;
-			theAsteroids[astro]->setTexture(theTextureMgr->getTexture(textureName[randAsteroid]));
-			theAsteroids[astro]->setSpriteDimensions(theTextureMgr->getTexture(textureName[randAsteroid])->getTWidth(), theTextureMgr->getTexture(textureName[randAsteroid])->getTHeight());
-			theAsteroids[astro]->setAsteroidVelocity({ 3, 3 });
-			theAsteroids[astro]->setActive(true);
-		}
-
 	score = 0;
 }
 
@@ -192,6 +179,14 @@ void cGame::render(SDL_Window* theSDLWND, SDL_Renderer* theRenderer)
 
 		//reset score
 		score = 0;
+
+		//Render Score
+		if (scoreChanged)
+		{
+			gameTextList[1] = scoreAsString.c_str();
+			theTextureMgr->addTexture("Score", theFontMgr->getFont("skipLegDay")->createTextTexture(theRenderer, gameTextList[1], SOLID, { 0, 255, 0, 255 }, { 0, 0, 0, 0 }));
+			scoreChanged = false;
+		}
 
 		SDL_RenderPresent(theRenderer);
 	}
@@ -277,22 +272,50 @@ void cGame::update()
 
 }
 
+
+
+
+
 void cGame::update(double deltaTime)
 {
-	//Check Button clicked and change state
-	if (theGameState == MENU || theGameState == END)
+	switch (theGameState)
+	{
+	case MENU:
 	{
 		theGameState = theButtonMgr->getBtn("exit_btn")->update(theGameState, QUIT, theAreaClicked);
 		theGameState = theButtonMgr->getBtn("play_btn")->update(theGameState, PLAYING, theAreaClicked);
+
+		if (theGameState == PLAYING)
+		{
+			// Remove all the asteroids if there are any - they will be recreated anyway below
+			vector<cAsteroid*>::iterator asteroidIterator = theAsteroids.begin();
+			while (asteroidIterator != theAsteroids.end())
+			{
+				asteroidIterator = theAsteroids.erase(asteroidIterator);
+			}
+
+			// Create vector array of textures
+			for (int astro = 0; astro < 5; astro++)
+			{
+				theAsteroids.push_back(new cAsteroid);
+				theAsteroids[astro]->setSpritePos({ 150 * (rand() % 5 + 1), 5 * (rand() % 5 + 1) });
+				theAsteroids[astro]->setSpriteTranslation({ 3 * (rand() % 2 + 1), 3 * (rand() % 2 + 1) });
+				int randAsteroid = rand() % 5;
+				theAsteroids[astro]->setTexture(theTextureMgr->getTexture(textureName[randAsteroid]));
+				theAsteroids[astro]->setSpriteDimensions(theTextureMgr->getTexture(textureName[randAsteroid])->getTWidth(), theTextureMgr->getTexture(textureName[randAsteroid])->getTHeight());
+				theAsteroids[astro]->setAsteroidVelocity({ 3, 3 });
+				theAsteroids[astro]->setActive(true);
+			}
+
+			score = 0;
+		}
 	}
-	else
+	break;
+	case PLAYING:
 	{
 		theGameState = theButtonMgr->getBtn("exit_btn")->update(theGameState, END, theAreaClicked);
-	}
 
-	theGameState = theButtonMgr->getBtn("menu_btn")->update(theGameState, MENU, theAreaClicked);
-
-	// Update the visibility and position of each fruit
+		// Update the visibility and position of each fruit
 		int fruitCaught = 0;
 
 		vector<cAsteroid*>::iterator asteroidIterator = theAsteroids.begin();
@@ -376,9 +399,18 @@ void cGame::update(double deltaTime)
 
 		theRocket.update(deltaTime);
 
-	if (theGameState == PLAYING && score >= 10)
+		if (score >= 10)
+		{
+			theGameState = END;
+		}
+	}
+	break;
+	case END:
 	{
-		theGameState = END;
+		theGameState = theButtonMgr->getBtn("exit_btn")->update(theGameState, QUIT, theAreaClicked);
+		theGameState = theButtonMgr->getBtn("menu_btn")->update(theGameState, MENU, theAreaClicked);
+	}
+	break;
 	}
 }
 
